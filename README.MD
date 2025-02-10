@@ -2,7 +2,7 @@
 
 ### Instructions
 This code has been tested on 
-- Python 3.8, PyTorch 1.7.1, CUDA 11.1, GeForce RTX 4090
+- Python 3.8, PyTorch 1.12.1, CUDA 11.3, GeForce RTX 4090
 
 #### Requirements
 To create a virtual environment and install the required dependences please run:
