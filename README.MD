@@ -1,10 +1,10 @@
 # FFMT: Unsupervised RGB-D Point Cloud Registration via Fusion Feature Matching with Transformer
 
-### Instructions
+## Instructions
 This code has been tested on 
 - Python 3.8, PyTorch 1.12.1, CUDA 11.3, GeForce RTX 4090
 
-#### Requirements
+## Requirements
 To create a virtual environment and install the required dependences please run:
 ```shell
 git clone https://github.com/yuyuyuyy11/FFMT.git
