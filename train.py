@@ -19,10 +19,10 @@ def add_argument_group(name):
     arg_lists.append(arg)
     return arg
 
-#dataset
+
 DATASET = add_argument_group('Dataset')
 DATASET.add_argument('--name', type=str, default='RGBD_3DMatch', help=['ScanNet', 'RGBD_3DMatch'])
-DATASET.add_argument('--RGBD_3D_ROOT', type=str, default='/data/datasets/qjc/3dmatch')     #need rewrite
+DATASET.add_argument('--RGBD_3D_ROOT', type=str, default='/data/datasets/3dmatch')     
 DATASET.add_argument('--SCANNET_ROOT', type=str, default='/data/datasets/scansNet')
 DATASET.add_argument('--batch_size', type=int, default= 2)
 DATASET.add_argument('--num_views', type=int, default= 2)
@@ -40,7 +40,7 @@ DATASET.add_argument('--processed', type=bool, default=False)
 
 
 MODEL = add_argument_group('Model')
-MODEL.add_argument('--model', type=str, default='PCReg_KPURes18_MSF')
+MODEL.add_argument('--model', type=str, default='FFMT')
 MODEL.add_argument('--feat_dim', type=int, default=32)
 MODEL.add_argument('--use_gt_vp', type=bool, default=False)
 
@@ -66,7 +66,7 @@ SYSTEM.add_argument('--TQDM', type=bool, default=True)
 
 TRAIN = add_argument_group('Traning')
 TRAIN.add_argument('--eval_step', type=int, default=5000)
-TRAIN.add_argument('--num_epochs', type=int, default=100)
+TRAIN.add_argument('--num_epochs', type=int, default=4)
 TRAIN.add_argument('--vis_step', type=int, default=500)
 TRAIN.add_argument('--optimizer', type=str, default="Adam")
 TRAIN.add_argument('--lr', type=float, default=1e-4)
