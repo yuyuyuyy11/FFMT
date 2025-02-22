@@ -390,24 +390,19 @@ class FFMT(nn.Module):
                 'attention':'linear'})
         
         self.self_attn_p1 = LoFTREncoderLayer(d_model=128,nhead=8)
-        self.self_attn_i2p1 = LoFTREncoderLayer(d_model=128,nhead=8)
         self.self_attn_i1 = LoFTREncoderLayer(d_model=64,nhead=8)
-        self.self_attn_p2i1 = LoFTREncoderLayer(d_model=64,nhead=8)
+
         
         self.self_attn_p2 = LoFTREncoderLayer(d_model=256,nhead=8)
-        self.self_attn_i2p2 = LoFTREncoderLayer(d_model=256,nhead=8)
         self.self_attn_i2 = LoFTREncoderLayer(d_model=128,nhead=8)
-        self.self_attn_p2i2 = LoFTREncoderLayer(d_model=128,nhead=8)
-        
+
         self.self_attn_p3 = LoFTREncoderLayer(d_model=512,nhead=8)
-        self.self_attn_i2p3 = LoFTREncoderLayer(d_model=512,nhead=8)
         self.self_attn_i3 = LoFTREncoderLayer(d_model=256,nhead=8)
-        self.self_attn_p2i3 = LoFTREncoderLayer(d_model=256,nhead=8)
+
         
         self.self_attn_p4 = LoFTREncoderLayer(d_model=256,nhead=8)
-        self.self_attn_i2p4 = LoFTREncoderLayer(d_model=256,nhead=8)
         self.self_attn_i4 = LoFTREncoderLayer(d_model=128,nhead=8)
-        self.self_attn_p2i4 = LoFTREncoderLayer(d_model=128,nhead=8)
+
         
         self.position_encoding = PositionEncodingSine(d_model=64,max_shape=(128,128))
         
@@ -470,16 +465,14 @@ class FFMT(nn.Module):
         feat_i2p = self.fuse_i2p_ds_0[0](feat_i2p.max(1)[0])
         feat_i2p = self.fusei2p(feat_p, feat_i2p, self.fuse_i2p_ds_0[1])
 
-        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p1,n_views)
-        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i1,n_views)
-        feat_i2p = feat_i2p + self.selfp(feat_i2p,self.self_attn_i2p1,n_views)
-        feat_p2i = feat_p2i + self.selfi(feat_p2i,self.self_attn_p2i1,n_views)
         
         
         feat_p = feat_p + feat_i2p
         feat_i = [feat_i[i] + feat_p2i[i] for i in range(n_views)]
         
-        
+        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p1,n_views)
+        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i1,n_views)
+
 
         feat_p_encode.append(feat_p)
         feat_i_encode.append(feat_i)
@@ -497,13 +490,12 @@ class FFMT(nn.Module):
         feat_i2p = self.fuse_i2p_ds_1[0](feat_i2p.max(1)[0])
         feat_i2p = self.fusei2p(feat_p, feat_i2p, self.fuse_i2p_ds_1[1])
 
-        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p2,n_views)
-        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i2,n_views)
-        feat_i2p = feat_i2p + self.selfp(feat_i2p,self.self_attn_i2p2,n_views)
-        feat_p2i = feat_p2i + self.selfi(feat_p2i,self.self_attn_p2i2,n_views)
         
         feat_p = feat_p + feat_i2p
         feat_i = [feat_i[i] + feat_p2i[i] for i in range(n_views)]
+
+        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p2,n_views)
+        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i2,n_views)
 
         feat_p_encode.append(feat_p)
         feat_i_encode.append(feat_i)
@@ -519,15 +511,12 @@ class FFMT(nn.Module):
         feat_i2p = self.fuse_i2p_ds_2[0](feat_i2p.max(1)[0])
         feat_i2p = self.fusei2p(feat_p, feat_i2p, self.fuse_i2p_ds_2[1])
         
-        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p3,n_views)
-        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i3,n_views)
-        feat_i2p = feat_i2p + self.selfp(feat_i2p,self.self_attn_i2p3,n_views)
-        feat_p2i = feat_p2i + self.selfi(feat_p2i,self.self_attn_p2i3,n_views)
 
         feat_p = feat_p + feat_i2p
         feat_i = [feat_i[i] + feat_p2i[i] for i in range(n_views)]
 
-        
+        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p3,n_views)
+        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i3,n_views)
         
         for block_i, block_op in enumerate(self.pcd_up_0):
             if block_i % 2 == 1:
@@ -546,14 +535,12 @@ class FFMT(nn.Module):
         feat_i2p = self.fuse_i2p_up_0[0](feat_i2p.max(1)[0])
         feat_i2p = self.fusei2p(feat_p, feat_i2p, self.fuse_i2p_up_0[1])
 
-        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p4,n_views)
-        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i4,n_views)
-        feat_i2p = feat_i2p + self.selfp(feat_i2p,self.self_attn_i2p4,n_views)
-        feat_p2i = feat_p2i + self.selfi(feat_p2i,self.self_attn_p2i4,n_views)
         
         feat_p = feat_p + feat_i2p 
         feat_i = [feat_i[i] + feat_p2i[i] for i in range(n_views)]
 
+        feat_p = feat_p + self.selfp(feat_p,self.self_attn_p4,n_views)
+        feat_i = feat_i + self.selfi(feat_i,self.self_attn_i4,n_views)
         
         for block_i, block_op in enumerate(self.pcd_up_1):
             if block_i % 2 == 1:
